@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">Inventory</string>
+    <string name="empty_view_title_text">It\'s a bit lonely here</string>
+    <string name="empty_view_subtitle_text">Get started by adding an outfit</string>
+
+    <string name="gender_unknown">Unknown</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+
+    <string name="age_Kids">Kids</string>
+    <string name="age_adult">Adults</string>
+
+
+    <string name="size_small">Small</string>
+    <string name="size_medium">Medium</string>
+    <string name="size_large">Large</string>
+    <string name="size_xlarge">XLarge</string>
+    <string name="savedError">Saved Error</string>
+    <string name="item_saved">Item saved successfully</string>
+    <string name="details_activity_title_new_outfit">New Outfit</string>
+    <string name="details_activity_title_edit_outfit">Edit Outfit</string>
+    <string name="editor_update_outfit_failed">Outfit Updating Failed</string>
+    <string name="editor_update_outfit_successful">Outfit Update Successful</string>
+    <string name="action_delete">Delete</string>
+
 </resources>

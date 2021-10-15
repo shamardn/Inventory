@@ -1,4 +1,4 @@
-package com.example.android.pets.data;
+package com.shamardn.android.inventory.data;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -9,34 +9,35 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
-import com.example.android.pets.data.PetContract.PetEntry;
+import com.shamardn.android.inventory.data.OutfitContract.OutfitEntry;
+
 /**
- * {@link ContentProvider} for Pets app.
+ * {@link ContentProvider} for Inventory app.
  */
-public class PetProvider extends ContentProvider {
+public class OutfitProvider extends ContentProvider {
 
-    private PetDbHelper mDbHelper;
-    /** Tag for the log messages */
-    public static final String LOG_TAG = PetProvider.class.getSimpleName();
-    private static final int PETS = 100;
-    private static final int PET_ID = 101;
-
+    /**
+     * Tag for the log messages
+     */
+    public static final String LOG_TAG = OutfitProvider.class.getSimpleName();
+    private static final int OUTFITS = 1000;
+    private static final int OUTFIT_ID = 2000;
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        sUriMatcher.addURI(PetContract.CONTENT_AUTHORITY,PetContract.PATH_PETS,PETS);
-        sUriMatcher.addURI(PetContract.CONTENT_AUTHORITY,PetContract.PATH_PETS+"/#", PET_ID);
+        sUriMatcher.addURI(OutfitContract.CONTENT_AUTHORITY, OutfitContract.PATH_OUTFITS, OUTFITS);
+        sUriMatcher.addURI(OutfitContract.CONTENT_AUTHORITY, OutfitContract.PATH_OUTFITS + "/#", OUTFIT_ID);
     }
+
+    private OutfitDbHelper mDbHelper;
 
     /**
      * Initialize the provider and the database helper object.
      */
     @Override
     public boolean onCreate() {
-        // TODO: Create and initialize a PetDbHelper object to gain access to the pets database.
-        // Make sure the variable is a global variable, so it can be referenced from other
-        // ContentProvider methods.
-        mDbHelper = new PetDbHelper(getContext());
+
+        mDbHelper = new OutfitDbHelper(getContext());
         return true;
     }
 
@@ -52,23 +53,23 @@ public class PetProvider extends ContentProvider {
         Cursor cursor;
 
         int match = sUriMatcher.match(uri);
-        switch (match){
-            case PETS:
-                cursor = db.query(PetEntry.TABLE_NAME, projection, selection, selectionArgs,
+        switch (match) {
+            case OUTFITS:
+                cursor = db.query(OutfitEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
 
-            case PET_ID:
-                selection = PetContract.PetEntry._ID + "=?";
-                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
-                cursor = db.query(PetEntry.TABLE_NAME, projection, selection, selectionArgs,
+            case OUTFIT_ID:
+                selection = OutfitEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                cursor = db.query(OutfitEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
 
             default:
                 throw new IllegalArgumentException("Can't query URI " + uri);
         }
-        cursor.setNotificationUri(getContext().getContentResolver(),uri);
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
@@ -79,45 +80,50 @@ public class PetProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues contentValues) {
         final int match = sUriMatcher.match(uri);
 
-        switch (match){
-            case PETS:
-              return insertPet(uri,contentValues);
+        switch (match) {
+            case OUTFITS:
+                return insertOutfit(uri, contentValues);
             default:
                 throw new IllegalArgumentException("insertion is not supported for " + uri);
         }
 
     }
 
-    private Uri insertPet(Uri uri,ContentValues contentValues){
+    private Uri insertOutfit(Uri uri, ContentValues contentValues) {
         // Check that the name is not null
-        String name = contentValues.getAsString(PetEntry.COLUMN_PET_NAME);
+        String name = contentValues.getAsString(OutfitEntry.COLUMN_OUTFIT_NAME);
         if (name == null) {
-            throw new IllegalArgumentException("Pet requires a name");
+            throw new IllegalArgumentException("Outfit requires a name");
+        }
+
+        String brand = contentValues.getAsString(OutfitEntry.COLUMN_OUTFIT_SUPPLIER);
+        if (brand == null) {
+            throw new IllegalArgumentException("Outfit requires a brand");
         }
 
         // Check that the gender is valid
-        Integer gender = contentValues.getAsInteger(PetEntry.COLUMN_PET_GENDER);
-        if (gender == null || !PetEntry.isValidGender(gender)){
-            throw new IllegalArgumentException("Pet requires valid gender");
+        Integer gender = contentValues.getAsInteger(OutfitEntry.COLUMN_OUTFIT_GENDER_CATEGORY);
+        if (gender == null || !OutfitEntry.isValidGender(gender)) {
+            throw new IllegalArgumentException("Outfit requires valid gender");
         }
 
-        // If the weight is provided, check that it's greater than or equal to 0 kg
-        Integer weight = contentValues.getAsInteger(PetEntry.COLUMN_PET_WEIGHT);
-        if (weight != null && weight < 0) {
-            throw new IllegalArgumentException("Pet requires valid weight");
+        // If the price is provided?
+        Integer price = contentValues.getAsInteger(OutfitEntry.COLUMN_OUTFIT_PRICE);
+        if (price != null && price < 0) {
+            throw new IllegalArgumentException("Outfit requires valid price");
         }
 
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        long id =  db.insert(PetContract.PetEntry.TABLE_NAME,null,contentValues);
+        long id = db.insert(OutfitEntry.TABLE_NAME, null, contentValues);
         // If the ID is -1, then the insertion failed. Log an error and return null.
         if (id == -1) {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
         }
-        getContext().getContentResolver().notifyChange(uri,null);
+        getContext().getContentResolver().notifyChange(uri, null);
 
-        return ContentUris.withAppendedId(uri, id) ;
+        return ContentUris.withAppendedId(uri, id);
     }
 
     /**
@@ -126,14 +132,14 @@ public class PetProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
-        switch (match){
-            case PETS:
-                return updatePet(uri,contentValues,selection,selectionArgs);
+        switch (match) {
+            case OUTFITS:
+                return updateOutfit(uri, contentValues, selection, selectionArgs);
 
-            case PET_ID:
-                selection = PetEntry._ID + "=?";
-                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
-                return updatePet(uri,contentValues,selection,selectionArgs);
+            case OUTFIT_ID:
+                selection = OutfitEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return updateOutfit(uri, contentValues, selection, selectionArgs);
 
             default:
                 throw new IllegalArgumentException("updating is not supported for " + uri);
@@ -141,28 +147,60 @@ public class PetProvider extends ContentProvider {
 
     }
 
-    private int updatePet(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs){
+    private int updateOutfit(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
         // Check that the name is not null
-        if (contentValues.containsKey(PetEntry.COLUMN_PET_NAME)) {
-            String name = contentValues.getAsString(PetEntry.COLUMN_PET_NAME);
+        if (contentValues.containsKey(OutfitEntry.COLUMN_OUTFIT_NAME)) {
+            String name = contentValues.getAsString(OutfitEntry.COLUMN_OUTFIT_NAME);
             if (name == null) {
-                throw new IllegalArgumentException("Pet requires a name");
+                throw new IllegalArgumentException("Outfit requires a name");
+            }
+        }
+
+        // Check that the brand is not null
+        if (contentValues.containsKey(OutfitEntry.COLUMN_OUTFIT_SUPPLIER)) {
+            String brand = contentValues.getAsString(OutfitEntry.COLUMN_OUTFIT_SUPPLIER);
+            if (brand == null) {
+                throw new IllegalArgumentException("Outfit requires a brand");
             }
         }
 
         // Check that the gender is valid
-        if (contentValues.containsKey(PetEntry.COLUMN_PET_GENDER)) {
-            Integer gender = contentValues.getAsInteger(PetEntry.COLUMN_PET_GENDER);
-            if (gender == null || !PetEntry.isValidGender(gender)) {
-                throw new IllegalArgumentException("Pet requires valid gender");
+        if (contentValues.containsKey(OutfitEntry.COLUMN_OUTFIT_GENDER_CATEGORY)) {
+            Integer gender = contentValues.getAsInteger(OutfitEntry.COLUMN_OUTFIT_GENDER_CATEGORY);
+            if (gender == null || !OutfitEntry.isValidGender(gender)) {
+                throw new IllegalArgumentException("Outfit requires valid gender");
             }
         }
 
-        // If the weight is provided, check that it's greater than or equal to 0 kg
-        if (contentValues.containsKey(PetEntry.COLUMN_PET_WEIGHT)) {
-            Integer weight = contentValues.getAsInteger(PetEntry.COLUMN_PET_WEIGHT);
-            if (weight != null && weight < 0) {
-                throw new IllegalArgumentException("Pet requires valid weight");
+        // If the color is provided?
+        if (contentValues.containsKey(OutfitEntry.COLUMN_OUTFIT_COLOR)) {
+            String color = contentValues.getAsString(OutfitEntry.COLUMN_OUTFIT_COLOR);
+            if (color == null) {
+                throw new IllegalArgumentException("Outfit requires valid color");
+            }
+        }
+
+        // If the price is provided?
+        if (contentValues.containsKey(OutfitEntry.COLUMN_OUTFIT_PRICE)) {
+            Integer price = contentValues.getAsInteger(OutfitEntry.COLUMN_OUTFIT_PRICE);
+            if (price != null && price < 0) {
+                throw new IllegalArgumentException("Outfit requires valid price");
+            }
+        }
+
+        // Check that the size is valid
+        if (contentValues.containsKey(OutfitEntry.COLUMN_OUTFIT_SIZE)) {
+            Integer size = contentValues.getAsInteger(OutfitEntry.COLUMN_OUTFIT_SIZE);
+            if (size == null || !OutfitEntry.isValidSize(size)) {
+                throw new IllegalArgumentException("Outfit requires valid size");
+            }
+        }
+
+        // Check that the age is valid
+        if (contentValues.containsKey(OutfitEntry.COLUMN_OUTFIT_AGE_CATEGORY)) {
+            Integer age = contentValues.getAsInteger(OutfitEntry.COLUMN_OUTFIT_AGE_CATEGORY);
+            if (age == null || !OutfitEntry.isValidAge(age)) {
+                throw new IllegalArgumentException("Outfit requires valid age");
             }
         }
 
@@ -173,7 +211,7 @@ public class PetProvider extends ContentProvider {
 
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        int rowsUpdated = db.update(PetEntry.TABLE_NAME, contentValues, selection, selectionArgs);
+        int rowsUpdated = db.update(OutfitEntry.TABLE_NAME, contentValues, selection, selectionArgs);
 
         // If 1 or more rows were updated, then notify all listeners that the data at the
         // given URI has changed
@@ -181,8 +219,9 @@ public class PetProvider extends ContentProvider {
             getContext().getContentResolver().notifyChange(uri, null);
         }
 
-        return   rowsUpdated;
+        return rowsUpdated;
     }
+
     /**
      * Delete the data at the given selection and selection arguments.
      */
@@ -197,15 +236,15 @@ public class PetProvider extends ContentProvider {
 
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
-                rowsDeleted =  db.delete(PetEntry.TABLE_NAME, selection, selectionArgs);
+            case OUTFITS:
+                rowsDeleted = db.delete(OutfitEntry.TABLE_NAME, selection, selectionArgs);
                 break;
 
-            case PET_ID:
+            case OUTFIT_ID:
                 // Delete a single row given by the ID in the URI
-                selection = PetEntry._ID + "=?";
+                selection = OutfitEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                rowsDeleted = db.delete(PetEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = db.delete(OutfitEntry.TABLE_NAME, selection, selectionArgs);
                 break;
 
             default:
@@ -226,10 +265,10 @@ public class PetProvider extends ContentProvider {
     public String getType(Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
-                return PetEntry.CONTENT_LIST_TYPE;
-            case PET_ID:
-                return PetEntry.CONTENT_ITEM_TYPE;
+            case OUTFITS:
+                return OutfitEntry.CONTENT_LIST_TYPE;
+            case OUTFIT_ID:
+                return OutfitEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }

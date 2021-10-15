@@ -1,32 +1,36 @@
-package com.example.android.pets.data;
+package com.shamardn.android.inventory.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.annotation.Nullable;
 
-import com.example.android.pets.data.PetContract.PetEntry;
+import org.jetbrains.annotations.Nullable;
 
-public class PetDbHelper extends SQLiteOpenHelper {
+import com.shamardn.android.inventory.data.OutfitContract.OutfitEntry;
+public class OutfitDbHelper extends SQLiteOpenHelper {
 
-    public final static String DATABASE_NAME = "shelter.db";
+    public final static String DATABASE_NAME = "inventory.db";
     public final static int DATABASE_VERSION = 1;
 
-    public PetDbHelper(@Nullable Context context) {
+    public OutfitDbHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        String SQL_CREATE_PETS_TABLE =  "CREATE TABLE " + PetEntry.TABLE_NAME + " ("
-                + PetEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + PetEntry.COLUMN_PET_NAME + " TEXT NOT NULL, "
-                + PetEntry.COLUMN_PET_BREED + " TEXT, "
-                + PetEntry.COLUMN_PET_GENDER + " INTEGER NOT NULL, "
-                + PetEntry.COLUMN_PET_WEIGHT + " INTEGER NOT NULL DEFAULT 0);";
+        String SQL_CREATE_OUTFITS_TABLE =  "CREATE TABLE " + OutfitEntry.TABLE_NAME + " ("
+                + OutfitEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + OutfitEntry.COLUMN_OUTFIT_NAME + " TEXT NOT NULL, "
+                + OutfitEntry.COLUMN_OUTFIT_SUPPLIER + " TEXT, "
+                + OutfitEntry.COLUMN_OUTFIT_GENDER_CATEGORY + " INTEGER, "
+                + OutfitEntry.COLUMN_OUTFIT_COLOR + " TEXT, "
+                + OutfitEntry.COLUMN_OUTFIT_SIZE + " INTEGER, "
+                + OutfitEntry.COLUMN_OUTFIT_AGE_CATEGORY + " INTEGER, "
+                + OutfitEntry.COLUMN_OUTFIT_IMAGE + " BOLB, "
+                + OutfitEntry.COLUMN_OUTFIT_PRICE + " INTEGER DEFAULT 0);";
         // Execute the SQL statement
-        db.execSQL(SQL_CREATE_PETS_TABLE);
+        db.execSQL(SQL_CREATE_OUTFITS_TABLE);
     }
 
     @Override

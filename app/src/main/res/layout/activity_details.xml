@@ -4,6 +4,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".DetailsActivity">
+
+    <EditText
+        android:id="@+id/adding_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="outfit name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/adding_brand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="outfit brand"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adding_name"/>
+
+    <EditText
+        android:id="@+id/adding_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="outfit color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adding_brand" />
+
+    <EditText
+        android:id="@+id/adding_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="outfit price"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adding_color" />
+
+    <Spinner
+        android:id="@+id/adding_gender_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adding_price" />
+
+    <Spinner
+        android:id="@+id/adding_age_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adding_gender_spinner" />
+
+    <Spinner
+        android:id="@+id/adding_size_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adding_age_spinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

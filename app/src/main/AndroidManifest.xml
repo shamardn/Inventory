@@ -10,6 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Inventory">
         <activity
+            android:name=".DetailsActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -18,6 +25,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="com.shamardn.android.inventory"
+            android:name=".data.OutfitProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>
