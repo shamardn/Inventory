@@ -27,5 +27,7 @@
     <string name="title">title</string>
     <string name="action_1">action1</string>
     <string name="action_2">action2</string>
+    <string name="quantity_text">quantity</string>
+    <string name="price_text">price</string>
 
 </resources>

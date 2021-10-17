@@ -25,7 +25,7 @@ public class OutfitCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
 
         TextView tvName = view.findViewById(R.id.name);
-        TextView tvBrand = view.findViewById(R.id.summary);
+        TextView tvBrand = view.findViewById(R.id.supplier);
 
         int nameColumn = cursor.getColumnIndex(OutfitEntry.COLUMN_OUTFIT_NAME);
         int brandColumn = cursor.getColumnIndex(OutfitEntry.COLUMN_OUTFIT_SUPPLIER);
