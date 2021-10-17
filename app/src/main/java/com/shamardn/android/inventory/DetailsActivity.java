@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -29,10 +31,11 @@ import com.shamardn.android.inventory.data.OutfitContract.OutfitEntry;
 public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 555;
-    private EditText mNameAdding,mBrandAdding,mColorAdding,mPriceAdding;
+    private EditText mNameAdding, mSupplierAdding,mColorAdding,mPriceAdding;
     private Spinner mGenderSpinner,mAgeSpinner,mSizeSpinner;
     private int mGender, mAge, mSize;
     private Uri currentOutfitUri;
+    private boolean isOutfitChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +55,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
         }
         mNameAdding = findViewById(R.id.adding_name);
-        mBrandAdding = findViewById(R.id.adding_brand);
+        mSupplierAdding = findViewById(R.id.adding_brand);
         mColorAdding = findViewById(R.id.adding_color);
         mPriceAdding  =findViewById(R.id.adding_price);
 
@@ -68,6 +71,47 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         setupAgeSpinner();
         setupSizeSpinner();
 
+        mNameAdding.setOnTouchListener(mTouchListener);
+        mSupplierAdding.setOnTouchListener(mTouchListener);
+        mColorAdding.setOnTouchListener(mTouchListener);
+        mPriceAdding.setOnTouchListener(mTouchListener);
+        mGenderSpinner.setOnTouchListener(mTouchListener);
+        mAgeSpinner.setOnTouchListener(mTouchListener);
+        mSizeSpinner.setOnTouchListener(mTouchListener);
+
+    }
+
+    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            isOutfitChanged = true;
+            return false;
+        }
+    };
+
+    @Override
+    public void onBackPressed() {
+        if (!isOutfitChanged){
+            super.onBackPressed();
+            return;
+        }else {
+            new MaterialAlertDialogBuilder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Discard Changes")
+                    .setMessage("Do you need discard Changes you made?")
+                    .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+        }
     }
 
     private void setupGenderSpinner() {
@@ -189,6 +233,31 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             case R.id.action_delete:
                 showDeleteDialog();
                 return true;
+
+            case android.R.id.home:
+                if (!isOutfitChanged){
+                    NavUtils.navigateUpFromSameTask(this);
+                    return true;
+                }else {
+                    new MaterialAlertDialogBuilder(this)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Discard")
+                            .setMessage("Do you need To discard Changes you made?")
+                            .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    NavUtils.navigateUpFromSameTask(DetailsActivity.this);
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                    return true;
+                }
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -228,7 +297,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     private void saveOutfit() {
 
         String nameString = mNameAdding.getText().toString().trim();
-        String brandString = mBrandAdding.getText().toString().trim();
+        String brandString = mSupplierAdding.getText().toString().trim();
         String colorString = mColorAdding.getText().toString().trim();
         String priceString = mPriceAdding.getText().toString().trim();
 
@@ -315,7 +384,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             mSize = cursor.getInt(outfitColumnSize);
 
             mNameAdding.setText(outfitName);
-            mBrandAdding.setText(outfitBrand);
+            mSupplierAdding.setText(outfitBrand);
             mColorAdding.setText(outfitColor);
             mPriceAdding.setText(String.valueOf(outfitPrice));
             mGenderSpinner.setSelection(mGender);
@@ -327,7 +396,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mNameAdding.setText("");
-        mBrandAdding.setText("");
+        mSupplierAdding.setText("");
         mColorAdding.setText("");
         mPriceAdding.setText("");
         mGenderSpinner.setSelection(OutfitEntry.GENDER_UNKNOWN);

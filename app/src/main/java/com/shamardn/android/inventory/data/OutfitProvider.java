@@ -11,14 +11,9 @@ import android.util.Log;
 
 import com.shamardn.android.inventory.data.OutfitContract.OutfitEntry;
 
-/**
- * {@link ContentProvider} for Inventory app.
- */
+
 public class OutfitProvider extends ContentProvider {
 
-    /**
-     * Tag for the log messages
-     */
     public static final String LOG_TAG = OutfitProvider.class.getSimpleName();
     private static final int OUTFITS = 1000;
     private static final int OUTFIT_ID = 2000;
