@@ -28,5 +28,6 @@
     <string name="action_2">action2</string>
     <string name="quantity_text">quantity</string>
     <string name="price_text">price</string>
+    <string name="empty">Empty Store</string>
 
 </resources>
