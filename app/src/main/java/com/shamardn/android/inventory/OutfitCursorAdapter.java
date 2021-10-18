@@ -25,15 +25,23 @@ public class OutfitCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
 
         TextView tvName = view.findViewById(R.id.name);
-        TextView tvBrand = view.findViewById(R.id.supplier);
+        TextView tvsupplier = view.findViewById(R.id.supplier);
+        TextView tvQuantity = view.findViewById(R.id.quantity);
+        TextView tvPrice = view.findViewById(R.id.price);
 
         int nameColumn = cursor.getColumnIndex(OutfitEntry.COLUMN_OUTFIT_NAME);
-        int brandColumn = cursor.getColumnIndex(OutfitEntry.COLUMN_OUTFIT_SUPPLIER);
+        int supplierColumn = cursor.getColumnIndex(OutfitEntry.COLUMN_OUTFIT_SUPPLIER);
+        int quantityColumn = cursor.getColumnIndex(OutfitEntry.COLUMN_OUTFIT_QUANTITY);
+        int priceColumn = cursor.getColumnIndex(OutfitEntry.COLUMN_OUTFIT_PRICE);
 
         String name = cursor.getString(nameColumn);
-        String brand = cursor.getString(brandColumn);
+        String supplier = cursor.getString(supplierColumn);
+        int quantity = cursor.getInt(quantityColumn);
+        int price = cursor.getInt(priceColumn);
 
         tvName.setText(name);
-        tvBrand.setText(brand);
+        tvsupplier.setText(supplier.toUpperCase());
+        tvQuantity.setText(quantity+ " pcs");
+        tvPrice.setText("$"+price);
     }
 }

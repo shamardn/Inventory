@@ -22,8 +22,7 @@
     <string name="editor_update_outfit_failed">Outfit Updating Failed</string>
     <string name="editor_update_outfit_successful">Outfit Update Successful</string>
     <string name="action_delete">Delete</string>
-    <string name="supporting_text">supporting text</string>
-    <string name="secondary_text">secondary text</string>
+     <string name="secondary_text">supplier</string>
     <string name="title">title</string>
     <string name="action_1">action1</string>
     <string name="action_2">action2</string>

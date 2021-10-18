@@ -31,7 +31,7 @@ import com.shamardn.android.inventory.data.OutfitContract.OutfitEntry;
 public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_ID = 555;
-    private EditText mNameAdding, mSupplierAdding,mColorAdding,mPriceAdding;
+    private EditText mNameAdding, mSupplierAdding,mQuantityAdding,mColorAdding,mPriceAdding;
     private Spinner mGenderSpinner,mAgeSpinner,mSizeSpinner;
     private int mGender, mAge, mSize;
     private Uri currentOutfitUri;
@@ -55,9 +55,10 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
         }
         mNameAdding = findViewById(R.id.adding_name);
-        mSupplierAdding = findViewById(R.id.adding_brand);
+        mSupplierAdding = findViewById(R.id.adding_supplier);
         mColorAdding = findViewById(R.id.adding_color);
         mPriceAdding  =findViewById(R.id.adding_price);
+        mQuantityAdding = findViewById(R.id.adding_quantity);
 
         mGenderSpinner = findViewById(R.id.adding_gender_spinner);
         mAgeSpinner = findViewById(R.id.adding_age_spinner);
@@ -75,6 +76,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         mSupplierAdding.setOnTouchListener(mTouchListener);
         mColorAdding.setOnTouchListener(mTouchListener);
         mPriceAdding.setOnTouchListener(mTouchListener);
+        mQuantityAdding.setOnTouchListener(mTouchListener);
         mGenderSpinner.setOnTouchListener(mTouchListener);
         mAgeSpinner.setOnTouchListener(mTouchListener);
         mSizeSpinner.setOnTouchListener(mTouchListener);
@@ -297,11 +299,12 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     private void saveOutfit() {
 
         String nameString = mNameAdding.getText().toString().trim();
-        String brandString = mSupplierAdding.getText().toString().trim();
+        String supplierString = mSupplierAdding.getText().toString().trim();
         String colorString = mColorAdding.getText().toString().trim();
         String priceString = mPriceAdding.getText().toString().trim();
+        String quantityString = mQuantityAdding.getText().toString().trim();
 
-        if (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(brandString) || TextUtils.isEmpty(colorString) || TextUtils.isEmpty(priceString)) {
+        if (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(supplierString) || TextUtils.isEmpty(colorString) || TextUtils.isEmpty(priceString) || TextUtils.isEmpty(quantityString)) {
             Toast.makeText(getApplicationContext(), "Error:\nEmpty Field", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -313,9 +316,10 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
         ContentValues values = new ContentValues();
         values.put(OutfitEntry.COLUMN_OUTFIT_NAME, nameString);
-        values.put(OutfitEntry.COLUMN_OUTFIT_SUPPLIER, brandString);
+        values.put(OutfitEntry.COLUMN_OUTFIT_SUPPLIER, supplierString);
+        values.put(OutfitEntry.COLUMN_OUTFIT_QUANTITY,Integer.parseInt(quantityString));
         values.put(OutfitEntry.COLUMN_OUTFIT_COLOR, colorString);
-        values.put(OutfitEntry.COLUMN_OUTFIT_PRICE, priceString);
+        values.put(OutfitEntry.COLUMN_OUTFIT_PRICE, Integer.parseInt(priceString));
         values.put(OutfitEntry.COLUMN_OUTFIT_GENDER_CATEGORY, mGender);
         values.put(OutfitEntry.COLUMN_OUTFIT_AGE_CATEGORY, mAge);
         values.put(OutfitEntry.COLUMN_OUTFIT_SIZE, mSize);
@@ -346,6 +350,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         String[] projection = {
                 OutfitEntry.COLUMN_OUTFIT_NAME,
                 OutfitEntry.COLUMN_OUTFIT_SUPPLIER,
+                OutfitEntry.COLUMN_OUTFIT_QUANTITY,
                 OutfitEntry.COLUMN_OUTFIT_COLOR,
                 OutfitEntry.COLUMN_OUTFIT_PRICE,
                 OutfitEntry.COLUMN_OUTFIT_GENDER_CATEGORY,
@@ -368,7 +373,8 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
         if (cursor.moveToNext()) {
             int outfitColumnName = cursor.getColumnIndex(OutfitEntry.COLUMN_OUTFIT_NAME);
-            int outfitColumnBrand = cursor.getColumnIndex(OutfitEntry.COLUMN_OUTFIT_SUPPLIER);
+            int outfitColumnSupplier = cursor.getColumnIndex(OutfitEntry.COLUMN_OUTFIT_SUPPLIER);
+            int outfitColumnQuantity = cursor.getColumnIndex(OutfitEntry.COLUMN_OUTFIT_QUANTITY);
             int outfitColumnColor = cursor.getColumnIndex(OutfitEntry.COLUMN_OUTFIT_COLOR);
             int outfitColumnPrice = cursor.getColumnIndex(OutfitEntry.COLUMN_OUTFIT_PRICE);
             int outfitColumnGender = cursor.getColumnIndex(OutfitEntry.COLUMN_OUTFIT_GENDER_CATEGORY);
@@ -376,15 +382,17 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             int outfitColumnSize = cursor.getColumnIndex(OutfitEntry.COLUMN_OUTFIT_SIZE);
 
             String outfitName = cursor.getString(outfitColumnName);
-            String outfitBrand = cursor.getString(outfitColumnBrand);
+            String outfitSupplier = cursor.getString(outfitColumnSupplier);
             String outfitColor = cursor.getString(outfitColumnColor);
-            String outfitPrice = cursor.getString(outfitColumnPrice);
+            int outfitPrice = cursor.getInt(outfitColumnPrice);
+            int outfitQuantity = cursor.getInt(outfitColumnQuantity);
             mGender = cursor.getInt(outfitColumnGender);
             mAge = cursor.getInt(outfitColumnAge);
             mSize = cursor.getInt(outfitColumnSize);
 
             mNameAdding.setText(outfitName);
-            mSupplierAdding.setText(outfitBrand);
+            mSupplierAdding.setText(outfitSupplier);
+            mQuantityAdding.setText(String.valueOf(outfitQuantity));
             mColorAdding.setText(outfitColor);
             mPriceAdding.setText(String.valueOf(outfitPrice));
             mGenderSpinner.setSelection(mGender);
@@ -397,6 +405,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mNameAdding.setText("");
         mSupplierAdding.setText("");
+        mQuantityAdding.setText("");
         mColorAdding.setText("");
         mPriceAdding.setText("");
         mGenderSpinner.setSelection(OutfitEntry.GENDER_UNKNOWN);

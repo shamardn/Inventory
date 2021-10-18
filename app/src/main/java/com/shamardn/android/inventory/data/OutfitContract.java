@@ -38,6 +38,7 @@ public final class OutfitContract {
 
         public final static String COLUMN_OUTFIT_NAME = "name";
         public final static String COLUMN_OUTFIT_SUPPLIER = "supplier";
+        public final static String COLUMN_OUTFIT_QUANTITY = "quantity";
         public final static String COLUMN_OUTFIT_PRICE = "price";
         public final static String COLUMN_OUTFIT_COLOR = "COLOR";
         public final static String COLUMN_OUTFIT_SIZE = "size";
@@ -74,6 +75,13 @@ public final class OutfitContract {
 
         public static boolean isValidAge(int age) {
             if (age == AGE_KID || age == AGE_ADULT) {
+                return true;
+            }
+            return false;
+        }
+
+        public static boolean isRealQuantity(int quantity){
+            if (quantity >= 0 ){
                 return true;
             }
             return false;

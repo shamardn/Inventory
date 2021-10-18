@@ -23,6 +23,7 @@ public class OutfitDbHelper extends SQLiteOpenHelper {
                 + OutfitEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + OutfitEntry.COLUMN_OUTFIT_NAME + " TEXT NOT NULL, "
                 + OutfitEntry.COLUMN_OUTFIT_SUPPLIER + " TEXT, "
+                + OutfitEntry.COLUMN_OUTFIT_QUANTITY + " INTEGER, "
                 + OutfitEntry.COLUMN_OUTFIT_GENDER_CATEGORY + " INTEGER, "
                 + OutfitEntry.COLUMN_OUTFIT_COLOR + " TEXT, "
                 + OutfitEntry.COLUMN_OUTFIT_SIZE + " INTEGER, "

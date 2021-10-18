@@ -91,9 +91,9 @@ public class OutfitProvider extends ContentProvider {
             throw new IllegalArgumentException("Outfit requires a name");
         }
 
-        String brand = contentValues.getAsString(OutfitEntry.COLUMN_OUTFIT_SUPPLIER);
-        if (brand == null) {
-            throw new IllegalArgumentException("Outfit requires a brand");
+        String supplier = contentValues.getAsString(OutfitEntry.COLUMN_OUTFIT_SUPPLIER);
+        if (supplier == null) {
+            throw new IllegalArgumentException("Outfit requires a supplier");
         }
 
         // Check that the gender is valid

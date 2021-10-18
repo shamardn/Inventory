@@ -17,10 +17,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/adding_brand"
+        android:id="@+id/adding_supplier"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="outfit brand"
+        android:hint="outfit supplier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/adding_name"/>
@@ -32,7 +32,7 @@
         android:hint="outfit color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/adding_brand" />
+        app:layout_constraintTop_toBottomOf="@+id/adding_supplier" />
 
     <EditText
         android:id="@+id/adding_price"
@@ -44,6 +44,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/adding_color" />
 
+    <EditText
+        android:id="@+id/adding_quantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="outfit quantity"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adding_price" />
+
+
     <Spinner
         android:id="@+id/adding_gender_spinner"
         android:layout_width="match_parent"
@@ -52,7 +63,7 @@
         android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/adding_price" />
+        app:layout_constraintTop_toBottomOf="@+id/adding_quantity" />
 
     <Spinner
         android:id="@+id/adding_age_spinner"

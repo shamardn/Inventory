@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         ContentValues values = new ContentValues();
         values.put(OutfitEntry.COLUMN_OUTFIT_NAME,"T-Shirt");
         values.put(OutfitEntry.COLUMN_OUTFIT_SUPPLIER,"rivin");
+        values.put(OutfitEntry.COLUMN_OUTFIT_QUANTITY,16);
         values.put(OutfitEntry.COLUMN_OUTFIT_GENDER_CATEGORY,OutfitEntry.GENDER_MALE);
         values.put(OutfitEntry.COLUMN_OUTFIT_AGE_CATEGORY,OutfitEntry.AGE_ADULT);
         values.put(OutfitEntry.COLUMN_OUTFIT_PRICE,399);
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
 
-        String[] projection = {OutfitEntry._ID,OutfitEntry.COLUMN_OUTFIT_NAME,OutfitEntry.COLUMN_OUTFIT_SUPPLIER,OutfitEntry.COLUMN_OUTFIT_PRICE,OutfitEntry.COLUMN_OUTFIT_GENDER_CATEGORY,OutfitEntry.COLUMN_OUTFIT_AGE_CATEGORY,OutfitEntry.COLUMN_OUTFIT_COLOR,OutfitEntry.COLUMN_OUTFIT_SIZE};
+        String[] projection = {OutfitEntry._ID,OutfitEntry.COLUMN_OUTFIT_NAME,OutfitEntry.COLUMN_OUTFIT_SUPPLIER,OutfitEntry.COLUMN_OUTFIT_QUANTITY,OutfitEntry.COLUMN_OUTFIT_PRICE,OutfitEntry.COLUMN_OUTFIT_GENDER_CATEGORY,OutfitEntry.COLUMN_OUTFIT_AGE_CATEGORY,OutfitEntry.COLUMN_OUTFIT_COLOR,OutfitEntry.COLUMN_OUTFIT_SIZE};
 
         return new CursorLoader(this,OutfitEntry.CONTENT_URI,projection,null,null,null);
 
