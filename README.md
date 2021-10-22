@@ -14,12 +14,12 @@ In the most recent portion of the Nanodegree program, you learned about data sto
 ## What will I Iearn?
 This project is about combining various ideas and skills we’ve been practicing throughout the course. They include:
 
-### Storing information in a SQLite database
-### Integrating Android’s file storage systems into that database
-### Presenting information from files and SQLite databases to users
-### Updating information based on user input.
-### Creating intents to other apps using stored information.
-### Note: As the focus of this program is Java, only projects completed with Java as the source code will be accepted. Projects using Kotlin as the source code will not be accepted.
+ Storing information in a SQLite database
+ Integrating Android’s file storage systems into that database
+ Presenting information from files and SQLite databases to users
+ Updating information based on user input.
+ Creating intents to other apps using stored information.
+ Note: As the focus of this program is Java, only projects completed with Java as the source code will be accepted. Projects using Kotlin as the source code will not be accepted.
 
 
 ## Build Your Project
@@ -29,6 +29,8 @@ Your project will be evaluated using the Inventory App project rubric.
 The intent of this project is to give you practice writing raw Java code using the necessary classes provided by the Android framework; therefore, the use of external libraries will not be permitted to complete this project.
 
 ## Review the Project Rubric
-Udacity reviewers will be reviewing your project based on the project rubric. All specifications must be met to pass the project.
+All specifications must be met to pass the project.
 
 https://review.udacity.com/#!/rubrics/163/view 
+
+
